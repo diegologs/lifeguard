@@ -5,11 +5,9 @@ export class Canvas {
   public size = { width: 280, height: 192 };
   public background = "#ffffff";
 
-  constructor() {
-    this.initiCanvas();
-  }
+  constructor() {}
 
-  private initiCanvas = async () => {
+  public init = async () => {
     this.app = new Application();
     await this.app.init({
       background: this.background,
