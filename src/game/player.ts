@@ -1,21 +1,7 @@
-import { Assets, Sprite, Texture } from "pixi.js";
-import { Position } from "./interfaces/position";
+import { Entity } from "./entity";
 
-export class Player extends Sprite {
+export class Player extends Entity {
   constructor() {
-    super();
-    this.loadSprite();
-    this.setPosition(0, 0);
+    super("./assets/player.png");
   }
-
-  loadSprite = async () => {
-    const texture = await Assets.load("/assets/player.png");
-    this.texture = texture;
-    this.anchor.set(0.5);
-  };
-
-  setPosition = (x: Position["x"], y: Position["y"]) => {
-    this.x = x;
-    this.y = y;
-  };
 }
