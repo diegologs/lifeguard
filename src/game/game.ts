@@ -4,12 +4,13 @@ import { Npc } from "./npc";
 import { Player } from "./player";
 
 export class Game {
-  static readonly instance: Game;
+  static instance: Game;
 
   public canvas: Canvas;
   private player: Player;
   private npc: Npc;
-  private npc2: Npc;
+
+  private playerTaskActionFactor = 5;
 
   private keyState: {
     [key: string]: boolean;
@@ -28,12 +29,13 @@ export class Game {
 
     this.player.setPosition(200, 200);
     this.npc.setPosition(240, 240);
-    this.npc.setNewTask();
 
     this.canvas.app.ticker.add((delta: Ticker) => {
       this.player.onKeyDown(this.keyState);
       this.player.update(delta);
       this.npc.update(delta);
+
+      this.playerNpcInteraction(delta);
     });
 
     this.setEvents();
@@ -57,4 +59,13 @@ export class Game {
       true
     );
   };
+
+  playerNpcInteraction(delta: Ticker) {
+    if (this.player.isNearEntity(this.npc, 40)) {
+      const isActionKeyDown = Boolean(this.keyState["e"]);
+      if (isActionKeyDown) {
+        this.npc.reduceTask(delta, this.playerTaskActionFactor);
+      }
+    }
+  }
 }

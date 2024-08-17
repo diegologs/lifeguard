@@ -5,7 +5,12 @@ export class Player extends Entity {
   private velocity = 5;
 
   constructor() {
-    super("./assets/player.png");
+    super();
+    this.load();
+  }
+
+  async load() {
+    await this.loadSprite("./assets/player.png");
   }
 
   update(delta: Ticker) {}
