@@ -11,6 +11,10 @@ export class Game {
   private npc: Npc;
   private npc2: Npc;
 
+  private keyState: {
+    [key: string]: boolean;
+  } = {};
+
   constructor() {}
   start = async () => {
     this.canvas = new Canvas();
@@ -18,23 +22,39 @@ export class Game {
 
     this.player = new Player();
     this.npc = new Npc();
-    this.npc2 = new Npc();
 
     this.canvas.app.stage.addChild(this.player);
     this.canvas.app.stage.addChild(this.npc);
-    this.canvas.app.stage.addChild(this.npc2);
 
     this.player.setPosition(200, 200);
-
     this.npc.setPosition(240, 240);
-    this.npc2.setPosition(300, 300);
-
     this.npc.setNewTask();
-    this.npc2.setNewTask();
 
     this.canvas.app.ticker.add((delta: Ticker) => {
+      this.player.onKeyDown(this.keyState);
+      this.player.update(delta);
       this.npc.update(delta);
-      this.npc2.update(delta);
     });
+
+    this.setEvents();
+  };
+
+  setEvents = () => {
+    window.addEventListener(
+      "keydown",
+      (event: KeyboardEvent) => {
+        const key = event.key.toLowerCase();
+        this.keyState[key] = true;
+      },
+      true
+    );
+    window.addEventListener(
+      "keyup",
+      (event: KeyboardEvent) => {
+        const key = event.key.toLowerCase();
+        this.keyState[key] = false;
+      },
+      true
+    );
   };
 }
