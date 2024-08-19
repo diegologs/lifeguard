@@ -1,12 +1,14 @@
 import { Graphics, Ticker } from "pixi.js";
 import { Entity } from "./entity";
-import { linearMap } from "../utils/numbers";
+import { linearMap, randomInRange } from "../utils/numbers";
 
 export class Npc extends Entity {
-  private taskTime: number = 0;
+  private taskTime: number = 3000;
   private taskMaxTime: number = 0;
-  private taskRange = { min: 5000, max: 10000 };
+  private taskRange = { min: 20000, max: 30000 };
   private taskBarMaxWidth = 100;
+
+  private idleTime = 0;
 
   private taskBar: Graphics;
 
@@ -17,17 +19,39 @@ export class Npc extends Entity {
 
   async load() {
     await this.loadSprite("./assets/npc.png");
-    this.setNewTask();
+    this.setIdleTime();
+  }
+
+  setIdleTime() {
+    this.idleTime = randomInRange(8000, 50000);
   }
 
   setNewTask() {
-    this.taskMaxTime = Math.random() * (this.taskRange.max - this.taskRange.min) + this.taskRange.min;
-    this.taskTime = 0;
+    this.taskMaxTime = randomInRange(this.taskRange.min, this.taskRange.max);
+    this.taskTime = 1;
     this.renderTask();
   }
 
   update = (delta: Ticker) => {
-    this.increaseTask(delta, 1);
+    if (this.idleTime === 0 && this.taskTime === 0) {
+      this.setNewTask();
+      this.setIdleTime();
+      return;
+    }
+    if (this.taskTime > 0) {
+      this.increaseTask(delta, 1);
+      return;
+    }
+    if (this.taskTime === 0 && this.idleTime > 0) {
+      this.taskBar?.clear();
+      this.taskBar = null;
+      this.decreaseIdle(delta, 1);
+      return;
+    }
+  };
+
+  decreaseIdle = (delta: Ticker, factor: number) => {
+    this.idleTime = Math.max(this.idleTime - delta.deltaMS * factor, 0);
   };
 
   reduceTask = (delta: Ticker, factor: number) => {
@@ -48,7 +72,10 @@ export class Npc extends Entity {
   };
 
   private createTaskBar() {
-    console.log(this.taskTime);
+    if (!this.taskBar) {
+      this.taskBar = new Graphics();
+      this.addChild(this.taskBar);
+    }
     const barWidth = linearMap(this.taskTime, 0, this.taskRange.max, 0, this.taskBarMaxWidth);
     this.taskBar = new Graphics().rect(0 - this.width / 2, -40, barWidth, 10).fill(0xff00ff);
   }

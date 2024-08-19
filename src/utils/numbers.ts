@@ -3,3 +3,7 @@ export const linearMap = (value, inMin, inMax, outMin, outMax) => {
   const percentage = (value - inMin) / (inMax - inMin);
   return outMin + percentage * (outMax - outMin);
 };
+
+export const randomInRange = (min: number, max: number) => {
+  return Math.random() * (max - min) + min;
+};
