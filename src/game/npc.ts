@@ -3,12 +3,12 @@ import { Entity } from "./entity";
 import { linearMap, randomInRange } from "../utils/numbers";
 
 export class Npc extends Entity {
-  private taskTime: number = 3000;
+  private taskTime: number = 0;
   private taskMaxTime: number = 0;
   private taskRange = { min: 20000, max: 30000 };
   private taskBarMaxWidth = 100;
 
-  private idleTime = 0;
+  private idleTime = 3000;
 
   private taskBar: Graphics;
 
@@ -20,6 +20,7 @@ export class Npc extends Entity {
   async load() {
     await this.loadSprite("./assets/npc.png");
     this.setIdleTime();
+    this.createTaskBar();
   }
 
   setIdleTime() {
@@ -33,6 +34,7 @@ export class Npc extends Entity {
   }
 
   update = (delta: Ticker) => {
+    console.log(this.idleTime, this.taskTime);
     if (this.idleTime === 0 && this.taskTime === 0) {
       this.setNewTask();
       this.setIdleTime();
@@ -44,7 +46,6 @@ export class Npc extends Entity {
     }
     if (this.taskTime === 0 && this.idleTime > 0) {
       this.taskBar?.clear();
-      this.taskBar = null;
       this.decreaseIdle(delta, 1);
       return;
     }
@@ -66,9 +67,8 @@ export class Npc extends Entity {
 
   renderTask = () => {
     this.taskBar?.clear();
-
-    this.createTaskBar();
-    this.addChild(this.taskBar);
+    const barWidth = linearMap(this.taskTime, 0, this.taskRange.max, 0, this.taskBarMaxWidth);
+    this.taskBar?.rect(0 - this.width / 2, -40, barWidth, 10).fill(0xff00ff);
   };
 
   private createTaskBar() {
@@ -76,7 +76,5 @@ export class Npc extends Entity {
       this.taskBar = new Graphics();
       this.addChild(this.taskBar);
     }
-    const barWidth = linearMap(this.taskTime, 0, this.taskRange.max, 0, this.taskBarMaxWidth);
-    this.taskBar = new Graphics().rect(0 - this.width / 2, -40, barWidth, 10).fill(0xff00ff);
   }
 }
