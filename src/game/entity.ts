@@ -1,5 +1,6 @@
-import { Assets, Sprite } from "pixi.js";
+import { Sprite } from "pixi.js";
 import { Position } from "./interfaces/position";
+import { Assets } from "./assets";
 
 export class Entity extends Sprite {
   constructor() {
@@ -7,10 +8,9 @@ export class Entity extends Sprite {
     this.setPosition(0, 0);
   }
 
-  loadSprite = async (texturePath: string): Promise<void> => {
+  loadSprite = async (x: number = 0, y: number = 16): Promise<void> => {
     return new Promise(async (resolve) => {
-      const texture = await Assets.load(texturePath);
-      this.texture = texture;
+      this.texture = Assets.instance.getTexture(x, y);
       this.anchor.set(0.5);
       resolve();
     });

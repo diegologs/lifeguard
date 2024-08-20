@@ -2,7 +2,7 @@ import { Ticker } from "pixi.js";
 import { Entity } from "./entity";
 
 export class Player extends Entity {
-  private velocity = 5;
+  private velocity = 0.5;
 
   constructor() {
     super();
@@ -10,7 +10,7 @@ export class Player extends Entity {
   }
 
   async load() {
-    await this.loadSprite("./assets/player.png");
+    await this.loadSprite(0, 16);
   }
 
   update(delta: Ticker) {}

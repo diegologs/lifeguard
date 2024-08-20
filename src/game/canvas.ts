@@ -11,10 +11,23 @@ export class Canvas {
     this.app = new Application();
     await this.app.init({
       background: this.background,
-      resizeTo: window,
       width: this.size.width,
       height: this.size.height,
+      resolution: window.devicePixelRatio || 1,
     });
+    this.app.stage.sortableChildren = true;
     document.body.appendChild(this.app.canvas);
+
+    this.resize();
+    window.addEventListener("resize", this.resize.bind(this));
   };
+
+  private resize(): void {
+    const scaleFactor = Math.min(window.innerWidth / this.size.width, window.innerHeight / this.size.height);
+    const newWidth = Math.ceil(this.size.width * scaleFactor);
+    const newHeight = Math.ceil(this.size.height * scaleFactor);
+
+    this.app.renderer.resize(newWidth, newHeight);
+    this.app.stage.scale.set(scaleFactor);
+  }
 }

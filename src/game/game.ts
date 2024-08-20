@@ -1,4 +1,4 @@
-import { Ticker } from "pixi.js";
+import { Assets, Ticker } from "pixi.js";
 import { Canvas } from "./canvas";
 import { Npc } from "./npc";
 import { Player } from "./player";
@@ -18,13 +18,14 @@ export class Game {
   } = {};
 
   constructor() {}
+
   start = async () => {
     this.canvas = new Canvas();
     await this.canvas.init();
 
     this.player = new Player();
     this.canvas.app.stage.addChild(this.player);
-    this.player.setPosition(200, 200);
+    this.player.setPosition(10, 10);
 
     this.createNpcs();
 
@@ -66,8 +67,10 @@ export class Game {
     }
     this.npcs.forEach((npc) => {
       this.canvas.app.stage.addChild(npc);
-      const xPosition = randomInRange(100, 1000);
-      const yPosition = randomInRange(100, 1000);
+      const npcPaddingX = npc.width / 2 + 5;
+      const npcPaddingY = npc.height / 2 + 10;
+      const xPosition = randomInRange(npcPaddingX, this.canvas.size.width - npcPaddingX);
+      const yPosition = randomInRange(npcPaddingY, this.canvas.size.height - npcPaddingX);
       npc.setPosition(xPosition, yPosition);
     });
   };
