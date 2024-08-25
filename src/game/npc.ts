@@ -18,7 +18,7 @@ export class Npc extends Entity {
   }
 
   async load() {
-    await this.loadSprite(0, 16);
+    await this.loadSprite(0, 32);
     this.setIdleTime();
     this.createTaskBar();
   }
@@ -67,7 +67,7 @@ export class Npc extends Entity {
   renderTask = () => {
     this.taskBar?.clear();
     const barWidth = linearMap(this.taskTime, 0, this.taskRange.max, 0, this.taskBarMaxWidth);
-    this.taskBar?.rect(0 - this.width / 2, -12, barWidth, 2).fill(0xff00ff);
+    this.taskBar?.rect(0 - this.width / 2, -10, barWidth, 2).fill(0xff00ff);
   };
 
   private createTaskBar() {
@@ -76,4 +76,8 @@ export class Npc extends Entity {
       this.addChild(this.taskBar);
     }
   }
+
+  isTaskOver = () => {
+    return this.taskMaxTime && this.taskTime >= this.taskMaxTime;
+  };
 }

@@ -10,7 +10,6 @@ export class Assets {
 
   load = async () => {
     TextureStyle.defaultOptions.scaleMode = "nearest";
-    console.log(TextureStyle);
     return new Promise(async (resolve) => {
       this.spriteSheet = await this.loadSpriteSheet();
       resolve(true);
@@ -23,10 +22,10 @@ export class Assets {
     });
   };
 
-  getTexture = (x: number = 0, y: number = 0) => {
+  getTexture = (x: number = 0, y: number = 0, x2: number = 0, y2: number = 0) => {
     return new Texture({
       source: this.spriteSheet,
-      frame: new Rectangle(x, y, this.spriteSize, this.spriteSize),
+      frame: new Rectangle(x, y, x2 || this.spriteSize, y2 || this.spriteSize),
     });
   };
 }

@@ -10,7 +10,7 @@ export class Entity extends Sprite {
 
   loadSprite = async (x: number = 0, y: number = 16): Promise<void> => {
     return new Promise(async (resolve) => {
-      this.texture = Assets.instance.getTexture(x, y);
+      this.texture = await Assets.instance.getTexture(x, y);
       this.anchor.set(0.5);
       resolve();
     });
@@ -19,6 +19,7 @@ export class Entity extends Sprite {
   setPosition = (x: Position["x"], y: Position["y"]) => {
     this.x = x;
     this.y = y;
+    this.zIndex = y;
   };
 
   isNearEntity(entity: Entity, distance: number) {
