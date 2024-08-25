@@ -133,7 +133,7 @@ export class Game {
 
   playerNpcInteraction(delta: Ticker) {
     this.npcs.forEach((npc) => {
-      if (this.player.isNearEntity(npc, 40)) {
+      if (this.player.isNearEntity(npc, 16)) {
         const isActionKeyDown = Boolean(this.keyState["e"]);
         if (isActionKeyDown) {
           npc.reduceTask(delta, this.playerTaskActionFactor);

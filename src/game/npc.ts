@@ -67,7 +67,14 @@ export class Npc extends Entity {
   renderTask = () => {
     this.taskBar?.clear();
     const barWidth = linearMap(this.taskTime, 0, this.taskRange.max, 0, this.taskBarMaxWidth);
-    this.taskBar?.rect(0 - this.width / 2, -10, barWidth, 2).fill(0xff00ff);
+    let color = 0x00a038;
+    if (this.taskBarMaxWidth - barWidth <= 9) {
+      color = 0xbf9f00;
+    }
+    if (this.taskBarMaxWidth - barWidth <= 4) {
+      color = 0xff0000;
+    }
+    this.taskBar?.rect(0 - this.width / 2, -10, barWidth, 2).fill(color);
   };
 
   private createTaskBar() {
